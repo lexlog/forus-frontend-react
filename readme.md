@@ -9,7 +9,7 @@ npm run start
 ## When web server start you can access the fronts by this users
 ### Web shops
 - http://localhost:5000/webshop.general
-- http://localhost:5000/webshop.nijmegen
+- http://localhost:5000/webshop.nijmegene
 
 ### Dashboards
 - http://localhost:5000/dashboard.sponsor
