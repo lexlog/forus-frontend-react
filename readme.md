@@ -14,7 +14,7 @@ npm run start
 ### Dashboards
 - http://localhost:5000/dashboard.sponsor
 - http://localhost:5000/dashboard.provider
-- http://localhost:5000/dashboard.validator
+- http://localhost:5000/dashboard.validatorr
 
 ## Building the fronts
 ```bash
