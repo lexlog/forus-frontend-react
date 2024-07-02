@@ -1,19 +1,20 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { PaginationData, ResponseError } from '../../../props/ApiResponses';
+import React, { useCallback, useEffect, useState } from 'react';
+import { PaginationData } from '../../../props/ApiResponses';
 import ReimbursementCategory from '../../../props/models/ReimbursementCategory';
 import Paginator from '../../../modules/paginator/components/Paginator';
 import useFilter from '../../../hooks/useFilter';
 import usePaginatorService from '../../../modules/paginator/services/usePaginatorService';
-import EmptyCard from '../../elements/empty-card/EmptyCard';
 import useOpenModal from '../../../hooks/useOpenModal';
 import useActiveOrganization from '../../../hooks/useActiveOrganization';
 import { useReimbursementCategoryService } from '../../../services/ReimbursementCategoryService';
 import usePushSuccess from '../../../hooks/usePushSuccess';
-import usePushDanger from '../../../hooks/usePushDanger';
 import ModalReimbursementCategoryEdit from '../../modals/ModalReimbursementCategoryEdit';
 import useConfirmReimbursementCategoryDelete from './hooks/useConfirmReimbursementCategoryDelete';
 import useSetProgress from '../../../hooks/useSetProgress';
 import useTranslate from '../../../hooks/useTranslate';
+import LoadingCard from '../loading-card/LoadingCard';
+import LoaderTableCard from '../loader-table-card/LoaderTableCard';
+import usePushApiError from '../../../hooks/usePushApiError';
 
 export default function BlockReimbursementCategories({
     compact = false,
@@ -26,8 +27,8 @@ export default function BlockReimbursementCategories({
 
     const openModal = useOpenModal();
     const translate = useTranslate();
-    const pushDanger = usePushDanger();
     const pushSuccess = usePushSuccess();
+    const pushApiError = usePushApiError();
     const setProgress = useSetProgress();
 
     const paginatorService = usePaginatorService();
@@ -35,6 +36,7 @@ export default function BlockReimbursementCategories({
 
     const confirmReimbursementCategoryDelete = useConfirmReimbursementCategoryDelete();
 
+    const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState<PaginationData<ReimbursementCategory>>(null);
     const [paginatorKey] = useState('reimbursement_categories');
 
@@ -44,14 +46,18 @@ export default function BlockReimbursementCategories({
     });
 
     const fetchReimbursementCategories = useCallback(() => {
+        setLoading(true);
         setProgress(0);
 
         reimbursementCategoryService
             .list(activeOrganization.id, filter.activeValues)
             .then((res) => setCategories(res.data))
-            .catch((err: ResponseError) => pushDanger('Mislukt!', err?.data?.message))
-            .finally(() => setProgress(100));
-    }, [setProgress, activeOrganization.id, filter.activeValues, pushDanger, reimbursementCategoryService]);
+            .catch(pushApiError)
+            .finally(() => {
+                setLoading(false);
+                setProgress(100);
+            });
+    }, [setProgress, activeOrganization.id, filter.activeValues, pushApiError, reimbursementCategoryService]);
 
     const editReimbursementCategory = useCallback(
         async (category: ReimbursementCategory = null): Promise<boolean> => {
@@ -81,15 +87,19 @@ export default function BlockReimbursementCategories({
 
                 reimbursementCategoryService
                     .destroy(activeOrganization.id, reimbursementCategory.id)
-                    .then(() => pushSuccess('Opgeslagen!'))
-                    .catch((err: ResponseError) => pushDanger('Mislukt!', err?.data?.message));
+                    .then(() => {
+                        fetchReimbursementCategories();
+                        pushSuccess('Opgeslagen!');
+                    })
+                    .catch(pushApiError);
             });
         },
         [
-            activeOrganization.id,
             confirmReimbursementCategoryDelete,
             reimbursementCategoryService,
-            pushDanger,
+            fetchReimbursementCategories,
+            activeOrganization.id,
+            pushApiError,
             pushSuccess,
         ],
     );
@@ -104,87 +114,90 @@ export default function BlockReimbursementCategories({
         }
     }, [editReimbursementCategory, createCategoryRef]);
 
+    if (!categories) {
+        return <LoadingCard />;
+    }
+
     return (
-        <Fragment>
-            <div className="card card-last">
-                {!compact && (
-                    <div className="card-header">
+        <div className="card card-last">
+            {!compact && (
+                <div className="card-header">
+                    <div className="flex">
+                        <div className="flex flex-grow">
+                            <div className="card-title">
+                                {categories?.meta
+                                    ? `Declaratie categorieën (${categories?.meta.total})`
+                                    : `Declaratie categorieën`}
+                            </div>
+                        </div>
+
                         <div className="flex">
-                            <div className="flex flex-grow">
-                                <div className="card-title">
-                                    {'Declaratie categorieën (' + categories?.meta.total + ')'}
-                                </div>
-                            </div>
-
-                            <div className="flex">
-                                <div className="block block-inline-filters">
-                                    <a
-                                        className="button button-primary button-sm"
-                                        id="add_reimbursement_category"
-                                        onClick={() => editReimbursementCategory()}>
-                                        <em className="mdi mdi-plus-circle icon-start" />
-                                        {translate('Toevoegen')}
-                                    </a>
-                                </div>
+                            <div className="block block-inline-filters">
+                                <a
+                                    className="button button-primary button-sm"
+                                    id="add_reimbursement_category"
+                                    onClick={() => editReimbursementCategory()}>
+                                    <em className="mdi mdi-plus-circle icon-start" />
+                                    {translate('Toevoegen')}
+                                </a>
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
+            )}
 
-                {categories?.data.length && (
-                    <div className="card-section card-section-primary">
-                        <div className="card-block card-block-table">
-                            <div className="table-wrapper">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Categorie naam</th>
-                                            <th>Organisatie</th>
-                                            <th>Totaal gebruikt</th>
-                                            <th className="th-narrow text-right">Opties</th>
+            <LoaderTableCard
+                loading={loading}
+                empty={categories?.data.length === 0}
+                emptyTitle={'Er zijn momenteel geen declaratie categorieën.'}>
+                <div className="card-section card-section-primary">
+                    <div className="card-block card-block-table">
+                        <div className="table-wrapper">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Categorie naam</th>
+                                        <th>Organisatie</th>
+                                        <th>Totaal gebruikt</th>
+                                        <th className="th-narrow text-right">Opties</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {categories?.data.map((reimbursementCategory) => (
+                                        <tr key={reimbursementCategory.id}>
+                                            <td>{reimbursementCategory.name}</td>
+                                            <td>{reimbursementCategory.organization.name}</td>
+                                            <td>{reimbursementCategory.reimbursements_count}</td>
+                                            <td className="td-narrow text-right">
+                                                <div className="flex">
+                                                    <a
+                                                        className="button button-sm button-default"
+                                                        onClick={() =>
+                                                            editReimbursementCategory(reimbursementCategory)
+                                                        }>
+                                                        <em className="mdi mdi-pen icon-start" />
+                                                        {translate('Bewerken')}
+                                                    </a>
+                                                    <button
+                                                        className="button button-danger button-icon"
+                                                        onClick={() =>
+                                                            deleteReimbursementCategory(reimbursementCategory)
+                                                        }
+                                                        disabled={reimbursementCategory.reimbursements_count > 0}>
+                                                        <em className="icon-start mdi mdi-delete" />
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {categories?.data.map((reimbursementCategory) => (
-                                            <tr key={reimbursementCategory.id}>
-                                                <td>{reimbursementCategory.name}</td>
-                                                <td>{reimbursementCategory.organization.name}</td>
-                                                <td>{reimbursementCategory.reimbursements_count}</td>
-                                                <td className="td-narrow text-right">
-                                                    <div className="flex">
-                                                        <a
-                                                            className="button button-sm button-default"
-                                                            onClick={() =>
-                                                                editReimbursementCategory(reimbursementCategory)
-                                                            }>
-                                                            <em className="mdi mdi-pen icon-start" />
-                                                            {translate('Bewerken')}
-                                                        </a>
-                                                        <button
-                                                            className="button button-danger button-icon"
-                                                            onClick={() =>
-                                                                deleteReimbursementCategory(reimbursementCategory)
-                                                            }
-                                                            disabled={reimbursementCategory.reimbursements_count > 0}>
-                                                            <em className="icon-start mdi mdi-delete" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                )}
+                </div>
 
-                {categories?.meta.total == 0 && (
-                    <EmptyCard description="Er zijn momenteel geen declaratie categorieën." />
-                )}
-
-                {categories?.meta.total && (
+                {categories?.meta.total > 0 && (
                     <div className={`card-section ${compact ? 'card-section-narrow' : ''}`}>
                         <div className="table-pagination">
                             <Paginator
@@ -196,7 +209,7 @@ export default function BlockReimbursementCategories({
                         </div>
                     </div>
                 )}
-            </div>
-        </Fragment>
+            </LoaderTableCard>
+        </div>
     );
 }

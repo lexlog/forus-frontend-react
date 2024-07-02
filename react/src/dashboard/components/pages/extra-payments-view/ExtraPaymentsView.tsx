@@ -15,6 +15,7 @@ import useExtraPaymentService from '../../../services/ExtraPaymentService';
 import ExtraPayment from '../../../props/models/ExtraPayment';
 import ReservationExtraPaymentDetails from '../reservations-view/elements/ReservationExtraPaymentDetails';
 import useTranslate from '../../../hooks/useTranslate';
+import TableEmptyValue from '../../elements/table-empty-value/TableEmptyValue';
 
 export default function ExtraPaymentsView() {
     const { id } = useParams();
@@ -187,7 +188,7 @@ export default function ExtraPaymentsView() {
                                                     {extraPayment.reservation.accepted_at_locale}
                                                 </strong>
                                             ) : (
-                                                <span className="text-muted">-</span>
+                                                <TableEmptyValue />
                                             )}
                                         </td>
                                         <td>
@@ -200,7 +201,7 @@ export default function ExtraPaymentsView() {
                                                     {extraPayment.reservation.rejected_at_locale}
                                                 </strong>
                                             ) : (
-                                                <span className="text-muted">-</span>
+                                                <TableEmptyValue />
                                             )}
                                         </td>
                                     </tr>

@@ -19,14 +19,18 @@ import { useFundService } from '../../../services/FundService';
 import usePaginatorService from '../../../modules/paginator/services/usePaginatorService';
 import EmptyCard from '../../elements/empty-card/EmptyCard';
 import useTranslate from '../../../hooks/useTranslate';
+import usePushApiError from '../../../hooks/usePushApiError';
 
 export default function ExtraPayments() {
-    const translate = useTranslate();
-    const fundService = useFundService();
     const activeOrganization = useActiveOrganization();
-    const extraPaymentService = useExtraPaymentService();
+
+    const translate = useTranslate();
     const setProgress = useSetProgress();
+    const pushApiError = usePushApiError('organization-no-permissions');
+
+    const fundService = useFundService();
     const paginatorService = usePaginatorService();
+    const extraPaymentService = useExtraPaymentService();
 
     const [loading, setLoading] = useState(false);
     const [paginatorKey] = useState('extra_payments');
@@ -49,11 +53,12 @@ export default function ExtraPayments() {
         extraPaymentService
             .list(activeOrganization.id, filter.activeValues)
             .then((res) => setExtraPayments(res.data))
+            .catch(pushApiError)
             .finally(() => {
                 setLoading(false);
                 setProgress(100);
             });
-    }, [extraPaymentService, activeOrganization.id, setProgress, filter?.activeValues]);
+    }, [extraPaymentService, activeOrganization.id, setProgress, filter?.activeValues, pushApiError]);
 
     const fetchFunds = useCallback(
         async (query: object): Promise<Array<Fund>> => {

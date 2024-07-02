@@ -150,6 +150,16 @@ export default function ImplementationsNotifications() {
         }
     }, [fetchImplementationNotifications, implementation]);
 
+    if (implementations?.meta?.total === 0) {
+        return (
+            <EmptyCard
+                title={
+                    'De systeemberichten zijn niet beschikbaar, omdat er geen webshop configuratie is voor deze organisatie.'
+                }
+            />
+        );
+    }
+
     if (!implementations || !notificationGroups) {
         return <LoadingCard />;
     }
@@ -321,14 +331,6 @@ export default function ImplementationsNotifications() {
                     </div>
                 </div>
             ))}
-
-            {implementations?.meta.total == 0 && (
-                <EmptyCard
-                    title={
-                        'De systeemberichten zijn niet beschikbaar, omdat er geen webshop configuratie is voor deze organisatie.'
-                    }
-                />
-            )}
         </Fragment>
     );
 }

@@ -2,7 +2,7 @@ import Transaction from '../../../../props/models/Transaction';
 import useTransactionService from '../../../../services/TransactionService';
 import useProductReservationService from '../../../../services/ProductReservationService';
 import Reservation from '../../../../props/models/Reservation';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import useEnvData from '../../../../hooks/useEnvData';
 import useActiveOrganization from '../../../../hooks/useActiveOrganization';
 import useAssetUrl from '../../../../hooks/useAssetUrl';
@@ -15,6 +15,7 @@ import usePushDanger from '../../../../hooks/usePushDanger';
 import useShowRejectInfoExtraPaid from '../../../../services/helpers/reservations/useShowRejectInfoExtraPaid';
 import LoadingCard from '../../../elements/loading-card/LoadingCard';
 import useTranslate from '../../../../hooks/useTranslate';
+import TableEmptyValue from '../../../elements/table-empty-value/TableEmptyValue';
 
 export default function TransactionDetails({
     transaction,
@@ -40,8 +41,6 @@ export default function TransactionDetails({
     const pushDanger = usePushDanger();
     const pushSuccess = usePushSuccess();
     const showRejectInfoExtraPaid = useShowRejectInfoExtraPaid();
-
-    const [voucherDetailsId, setVoucherDetailsId] = useState<number>(null);
 
     const isSponsor = useMemo(() => envData.client_type == 'sponsor', [envData.client_type]);
     const isProvider = useMemo(() => envData.client_type == 'provider', [envData.client_type]);
@@ -106,13 +105,7 @@ export default function TransactionDetails({
         fetchTransaction().then((res) => setTransaction(res.data.data));
     }, [fetchTransaction, setTransaction]);
 
-    useEffect(() => {
-        const { product_reservation, voucher_id } = transaction;
-
-        setVoucherDetailsId(product_reservation?.voucher_id || voucher_id);
-    }, [isSponsor, transaction]);
-
-    if (!transaction || !voucherDetailsId) {
+    if (!transaction) {
         return <LoadingCard />;
     }
 
@@ -186,7 +179,7 @@ export default function TransactionDetails({
                                         name={'vouchers-show'}
                                         params={{
                                             organizationId: activeOrganization.id,
-                                            id: voucherDetailsId,
+                                            id: transaction.product_reservation?.voucher_id || transaction.voucher_id,
                                         }}
                                         className="button button-primary">
                                         <em className="mdi mdi-eye-outline icon-start" />
@@ -273,7 +266,9 @@ export default function TransactionDetails({
                                         <div className="keyvalue-key">
                                             {translate('financial_dashboard_transaction.labels.date_non_cancelable')}
                                         </div>
-                                        <div className="keyvalue-value">{transaction.non_cancelable_at_locale}</div>
+                                        <div className="keyvalue-value">
+                                            {transaction.non_cancelable_at_locale || <TableEmptyValue />}
+                                        </div>
                                     </div>
                                 )}
                                 <div className="keyvalue-item">

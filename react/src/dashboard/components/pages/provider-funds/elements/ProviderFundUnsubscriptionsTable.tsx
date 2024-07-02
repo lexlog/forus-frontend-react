@@ -305,7 +305,7 @@ export default function ProviderFundUnsubscriptionsTable({
                                                             rel="noreferrer"
                                                             href={unsubscription.fund.implementation.url_webshop}
                                                             className="text-strong text-md text-muted-dark text-inherit">
-                                                            {strLimit(unsubscription.fund.implementation.name, 40)}
+                                                            {strLimit(unsubscription.fund.implementation?.name, 40)}
                                                         </a>
                                                     </div>
                                                 </div>

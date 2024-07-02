@@ -3,9 +3,12 @@ import ClickOutside from '../../click-outside/ClickOutside';
 import { uniqueId } from 'lodash';
 import { SelectControlOptionsProp } from '../SelectControl';
 import Organization from '../../../../props/models/Organization';
-import { NavLink } from 'react-router-dom';
-import { getStateRouteUrl } from '../../../../modules/state_router/Router';
 import useThumbnailUrl from '../../../../hooks/useThumbnailUrl';
+import StateNavLink from '../../../../modules/state_router/StateNavLink';
+import useTranslate from '../../../../hooks/useTranslate';
+import useActiveOrganization from '../../../../hooks/useActiveOrganization';
+import { hasPermission } from '../../../../helpers/utils';
+import useIsSponsorPanel from '../../../../hooks/useIsSponsorPanel';
 
 export default function SelectControlOptionsOrganization<T>({
     query,
@@ -24,6 +27,10 @@ export default function SelectControlOptionsOrganization<T>({
     searchInputChanged,
     onOptionsScroll,
 }: SelectControlOptionsProp<T>) {
+    const translate = useTranslate();
+    const isSponsorPanel = useIsSponsorPanel();
+    const activeOrganization = useActiveOrganization();
+
     const [controlId] = useState('select_control_' + uniqueId());
     const thumbnailUrl = useThumbnailUrl();
     const input = useRef(null);
@@ -152,27 +159,47 @@ export default function SelectControlOptionsOrganization<T>({
                         </div>
 
                         <div className="select-control-options-actions">
-                            <NavLink
-                                to={getStateRouteUrl('organizations-edit', {
-                                    organizationId: (modelValue?.raw as Organization)?.id,
-                                })}
-                                onClick={() => setShowOptions(false)}
-                                className="select-control-switcher-setting">
-                                <div className="select-control-switcher-setting-icon">
-                                    <em className="mdi mdi-cog" />
-                                </div>
-                                <div className="select-control-switcher-setting-name">Organisatie instellingen</div>
-                            </NavLink>
+                            {isSponsorPanel && hasPermission(activeOrganization, 'manage_organization') && (
+                                <StateNavLink
+                                    name={'organizations-contacts'}
+                                    params={{ organizationId: (modelValue?.raw as Organization)?.id }}
+                                    onClick={() => setShowOptions(false)}
+                                    className="select-control-switcher-setting">
+                                    <div className="select-control-switcher-setting-icon">
+                                        <em className="mdi mdi-email-edit-outline" />
+                                    </div>
+                                    <div className="select-control-switcher-setting-name">
+                                        {translate('organizations.buttons.contacts')}
+                                    </div>
+                                </StateNavLink>
+                            )}
 
-                            <NavLink
-                                to={getStateRouteUrl('organizations-create')}
+                            {hasPermission(activeOrganization, 'manage_organization') && (
+                                <StateNavLink
+                                    name={'organizations-edit'}
+                                    params={{ organizationId: (modelValue?.raw as Organization)?.id }}
+                                    onClick={() => setShowOptions(false)}
+                                    className="select-control-switcher-setting">
+                                    <div className="select-control-switcher-setting-icon">
+                                        <em className="mdi mdi-cog" />
+                                    </div>
+                                    <div className="select-control-switcher-setting-name">
+                                        {translate('organizations.buttons.edit')}
+                                    </div>
+                                </StateNavLink>
+                            )}
+
+                            <StateNavLink
+                                name={'organizations-create'}
                                 onClick={() => setShowOptions(false)}
                                 className="select-control-switcher-setting">
                                 <div className="select-control-switcher-setting-icon">
                                     <em className="mdi mdi-plus-circle" />
                                 </div>
-                                <div className="select-control-switcher-setting-name">Organisatie toevoegen</div>
-                            </NavLink>
+                                <div className="select-control-switcher-setting-name">
+                                    {translate('organizations.buttons.add')}
+                                </div>
+                            </StateNavLink>
                         </div>
                     </ClickOutside>
                 )}

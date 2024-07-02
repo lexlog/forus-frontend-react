@@ -360,7 +360,6 @@ export default function OrganizationForm() {
                                 <MarkdownEditor
                                     value={form.values?.description_html || ''}
                                     onChange={(description) => form.update({ description })}
-                                    extendedOptions={true}
                                     placeholder={translate('organization_edit.labels.description')}
                                 />
                                 <FormError error={form.errors?.description} />
@@ -387,7 +386,7 @@ export default function OrganizationForm() {
                             <FormError error={form.errors?.kvk} />
                         </div>
                         <div className="form-group form-group-inline">
-                            <label htmlFor="kvk" className="form-label form-label-required">
+                            <label htmlFor="kvk" className="form-label">
                                 {translate('organization_edit.labels.tax')}
                             </label>
                             <input

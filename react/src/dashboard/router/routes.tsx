@@ -90,6 +90,7 @@ import ThrowError from '../components/pages_system/ThrowError';
 import Implementations from '../components/pages/implementations/Implementations';
 import ExternalValidators from '../components/pages/external-validators/ExternalValidators';
 import SponsorFundUnsubscriptions from '../components/pages/sponsor-fund-unsubscriptions/SponsorFundUnsubscriptions';
+import OrganizationsContacts from '../components/pages/organizations-contacts/OrganizationsContacts';
 
 const router = new RouterBuilder();
 
@@ -349,6 +350,11 @@ router.state('organization-logs', <EventLogs />, {
 
 router.state('bi-connection', <BiConnection />, {
     path: `/organizations/:organizationId/bi-connection`,
+    fallbackState: 'organizations',
+});
+
+router.state('organizations-contacts', <OrganizationsContacts />, {
+    path: `/organizations/:organizationId/contacts`,
     fallbackState: 'organizations',
 });
 

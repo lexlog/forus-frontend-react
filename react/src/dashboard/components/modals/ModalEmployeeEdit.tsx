@@ -14,6 +14,7 @@ import SelectControl from '../elements/select-control/SelectControl';
 import SelectControlOptions from '../elements/select-control/templates/SelectControlOptions';
 import useOfficeService from '../../services/OfficeService';
 import classNames from 'classnames';
+import useIsProviderPanel from '../../hooks/useIsProviderPanel';
 
 export default function ModalEmployeeEdit({
     modal,
@@ -30,10 +31,13 @@ export default function ModalEmployeeEdit({
     cancelButton?: ModalButton;
     organization: Organization;
 }) {
-    const [roles, setRoles] = useState<Array<Role>>([]);
+    const isProviderPanel = useIsProviderPanel();
+
     const roleService = useRoleService();
     const employeeService = useEmployeeService();
     const officeService = useOfficeService();
+
+    const [roles, setRoles] = useState<Array<Role>>([]);
 
     const form = useFormBuilder(
         {
@@ -125,7 +129,7 @@ export default function ModalEmployeeEdit({
                             </div>
                         )}
 
-                        {offices?.length > 1 && (
+                        {((isProviderPanel && offices?.length > 1) || form.errors?.office_id) && (
                             <div className="form-group">
                                 <label htmlFor="" className="form-label form-label-required">
                                     Selecteer vestiging

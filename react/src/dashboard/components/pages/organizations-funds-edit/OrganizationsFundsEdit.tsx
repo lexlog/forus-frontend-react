@@ -242,14 +242,16 @@ export default function OrganizationsFundsEdit() {
                 return form.setIsLocked(false);
             }
 
+            const formValues = {
+                ...data,
+                faq: faq,
+                media_uid: (fundPhoto ? await storeMedia(fundPhoto) : null)?.uid,
+                ...(applicationMethodsByKey[values.application_method]?.configs || {}),
+            };
+
             if (fundId) {
                 return fundService
-                    .update(activeOrganization.id, parseInt(fundId), {
-                        ...data,
-                        faq: faq,
-                        media_uid: (fundPhoto ? await storeMedia(fundPhoto) : null)?.uid,
-                        ...(applicationMethodsByKey[values.application_method]?.configs || {}),
-                    })
+                    .update(activeOrganization.id, parseInt(fundId), formValues)
                     .then(() => {
                         navigateState('funds-show', { organizationId: activeOrganization.id, fundId: fundId });
                         pushSuccess('Gelukt!', 'Het fonds is aangepast!');
@@ -258,7 +260,7 @@ export default function OrganizationsFundsEdit() {
                     .finally(() => form.setIsLocked(false));
             } else {
                 return fundService
-                    .store(activeOrganization.id, { ...data, faq: faq })
+                    .store(activeOrganization.id, formValues)
                     .then(() => {
                         navigateState('organization-funds', { organizationId: activeOrganization.id });
                         pushSuccess('Gelukt!', 'Het fonds is aangemaakt!');

@@ -9,7 +9,7 @@ import { PaginationData, ResponseError, ResponseErrorData } from '../../../props
 import useImplementationService from '../../../services/ImplementationService';
 import { useParams } from 'react-router-dom';
 import Implementation from '../../../props/models/Implementation';
-import { getStateRouteUrl, useNavigateState } from '../../../modules/state_router/Router';
+import { useNavigateState } from '../../../modules/state_router/Router';
 import { hasPermission } from '../../../helpers/utils';
 import SelectControlOptions from '../../elements/select-control/templates/SelectControlOptions';
 import SelectControl from '../../elements/select-control/SelectControl';
@@ -122,8 +122,8 @@ export default function ImplementationsNotificationsSend() {
     });
 
     const exportIdentities = useCallback(() => {
-        fundIdentitiesExportService.exportData(activeOrganization.id, fund.id, identitiesFilters);
-    }, [activeOrganization?.id, fund?.id, fundIdentitiesExportService, identitiesFilters]);
+        fundIdentitiesExportService.exportData(activeOrganization.id, fund.id, identitiesFilters.activeValues);
+    }, [activeOrganization?.id, fund?.id, fundIdentitiesExportService, identitiesFilters.activeValues]);
 
     const onTemplateUpdated = useCallback(
         (item: SystemNotification) => {
@@ -235,12 +235,10 @@ export default function ImplementationsNotificationsSend() {
                     content: implementationNotificationsService.labelsToVars(template.content),
                 })
                 .then(() => {
-                    navigateState(
-                        getStateRouteUrl('implementation-notifications', {
-                            organizationId: activeOrganization.id,
-                            implementationId: implementation.id,
-                        }),
-                    );
+                    navigateState('implementation-notifications', {
+                        organizationId: activeOrganization.id,
+                        implementationId: implementation.id,
+                    });
 
                     pushSuccess('Gelukt!', 'De e-mail zal zo spoedig mogelijk verstuurd worden naar alle gebruikers.', {
                         timeout: 8000,
@@ -324,12 +322,10 @@ export default function ImplementationsNotificationsSend() {
             .read(activeOrganization.id, parseInt(id))
             .then((res) => {
                 if (!activeOrganization.allow_custom_fund_notifications) {
-                    navigateState(
-                        getStateRouteUrl('implementation-notifications', {
-                            organizationId: activeOrganization.id,
-                            implementationId: res.data.data.id,
-                        }),
-                    );
+                    navigateState('implementation-notifications', {
+                        organizationId: activeOrganization.id,
+                        implementationId: res.data.data.id,
+                    });
                 }
 
                 setImplementation(res.data.data);

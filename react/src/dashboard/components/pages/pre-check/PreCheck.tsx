@@ -161,7 +161,7 @@ export default function PreCheck() {
             record_settings: recordType.funds.map((fund) => {
                 return (
                     recordType.record_settings.find((setting) => setting.fund_id == fund.id) || {
-                        implementation_name: fund.implementation.name,
+                        implementation_name: fund.implementation?.name,
                         implementation_url_webshop: fund.implementation.url_webshop,
                         fund_id: fund.id,
                         fund_name: fund.name,

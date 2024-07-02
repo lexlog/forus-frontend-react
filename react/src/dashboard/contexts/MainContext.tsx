@@ -13,11 +13,12 @@ interface AuthMemoProps {
     appConfigs?: AppConfigProp;
     setAppConfigs?: (appConfigs: AppConfigProp) => void;
     activeOrganization?: Organization;
-    setActiveOrganization: (organization: Organization) => void;
+    setActiveOrganization: React.Dispatch<React.SetStateAction<Organization>>;
     organizations?: Array<Organization>;
-    setOrganizations: (organization: Array<Organization>) => void;
+    setOrganizations: React.Dispatch<React.SetStateAction<Array<Organization>>>;
     clearAll: () => void;
     fetchOrganizations: () => Promise<Array<Organization> | null>;
+    setOrganizationData: (id: number, data: Partial<Organization>) => void;
 }
 
 const mainContext = createContext<AuthMemoProps>(null);
@@ -29,8 +30,8 @@ const MainProvider = ({ children }: { children: React.ReactElement }) => {
     const authIdentity = useAuthIdentity();
     const navigateState = useNavigateState();
 
-    const [organizations, setOrganizations] = useState(null);
-    const [activeOrganization, setActiveOrganization] = useState(null);
+    const [organizations, setOrganizations] = useState<Array<Organization>>(null);
+    const [activeOrganization, setActiveOrganization] = useState<Organization>(null);
 
     const configService = useConfigService();
     const organizationService = useOrganizationService();
@@ -58,6 +59,18 @@ const MainProvider = ({ children }: { children: React.ReactElement }) => {
         setOrganizations(null);
         return null;
     }, [authIdentity, envData, organizationService]);
+
+    const setOrganizationData = useCallback((id: number, data: Partial<Organization>) => {
+        setOrganizations((organizations) => {
+            const organization = organizations.find((item) => item.id === id);
+
+            if (organization) {
+                Object.assign(organization, data);
+            }
+
+            return [...organizations];
+        });
+    }, []);
 
     useEffect(() => {
         if (!envData?.type) {
@@ -100,6 +113,7 @@ const MainProvider = ({ children }: { children: React.ReactElement }) => {
                 organizations,
                 setOrganizations,
                 fetchOrganizations,
+                setOrganizationData,
             }}>
             {children}
         </Provider>

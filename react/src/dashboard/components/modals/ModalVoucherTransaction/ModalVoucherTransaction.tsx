@@ -119,7 +119,7 @@ export default function ModalVoucherTransaction({
         {
             note: '',
             note_shared: false,
-            amount: '',
+            amount: null,
             target: target || targets[0]?.key,
             voucher_id: voucher.id,
             organization_id: providers[0]?.id,
@@ -173,11 +173,11 @@ export default function ModalVoucherTransaction({
         const { amount, iban_source } = form.values;
 
         if (target === 'provider') {
-            return !organization_id || !amount;
+            return !organization_id || !amount || parseFloat(amount) === 0;
         }
 
         if (target === 'top_up') {
-            return !amount;
+            return !amount || parseFloat(amount) === 0;
         }
 
         if (target === 'iban') {
@@ -411,7 +411,7 @@ export default function ModalVoucherTransaction({
                                     <input
                                         className="form-control"
                                         type="number"
-                                        value={form.values.amount}
+                                        value={form.values.amount || ''}
                                         step=".01"
                                         min=".02"
                                         max={amountLimit}
@@ -426,7 +426,7 @@ export default function ModalVoucherTransaction({
                                         <FormError error={form.errors?.amount} />
                                     )}
                                 </div>
-                                <FormError error={form.errors?.organization_id} />
+                                <FormError error={form.errors?.amount} />
                             </div>
 
                             <div className="form-group form-group-inline form-group-inline-md">
@@ -446,7 +446,7 @@ export default function ModalVoucherTransaction({
                                         <FormError error={form.errors?.note} />
                                     )}
                                 </div>
-                                <FormError error={form.errors?.organization_id} />
+                                <FormError error={form.errors?.note} />
                             </div>
 
                             <div className="form-group form-group-inline form-group-inline-md">

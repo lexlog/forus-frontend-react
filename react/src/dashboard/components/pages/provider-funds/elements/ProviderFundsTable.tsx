@@ -273,7 +273,7 @@ export default function ProviderFundsTable({
                                                             target="_blank"
                                                             className="text-strong text-md text-muted-dark text-inherit"
                                                             rel="noreferrer">
-                                                            {strLimit(providerFund.fund.implementation.name, 32)}
+                                                            {strLimit(providerFund.fund.implementation?.name, 32)}
                                                         </a>
                                                     </div>
                                                 </div>

@@ -218,16 +218,17 @@ export default function TransactionBulksView() {
                 .submit(activeOrganization.id, transactionBulk.id)
                 .then((res) => {
                     if (!res.data?.data?.auth_url) {
+                        setSubmittingBulk(false);
                         onError();
                     }
 
                     document.location = res.data.data.auth_url;
                 })
-                .catch((res: ResponseError) => onError(res))
-                .finally(() => {
+                .catch((res: ResponseError) => {
+                    onError(res);
                     setSubmittingBulk(false);
-                    setProgress(100);
-                });
+                })
+                .finally(() => setProgress(100));
         });
     }, [activeOrganization.id, confirmSubmitToBNG, onError, setProgress, transactionBulk?.id, transactionBulkService]);
 

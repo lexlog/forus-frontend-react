@@ -40,7 +40,7 @@ module.exports = (env, argv) => {
         return new HtmlWebpackPlugin({
             template: `../../react/public/index.ejs`,
             templateParameters: {
-                title: `Forus ${item.client_type} app`,
+                title: item.default_title || 'Forus',
                 script: webPath(`/${scriptPath}`),
                 base: webPath(`/`),
                 favicon: webPath(`/assets/img/favicon.ico`),

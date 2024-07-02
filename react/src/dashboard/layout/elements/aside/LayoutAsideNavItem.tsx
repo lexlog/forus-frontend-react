@@ -1,7 +1,6 @@
 import { MouseEventHandler } from 'react';
-import { getStateRouteUrl } from '../../../modules/state_router/Router';
-import { NavLink } from 'react-router-dom';
 import React from 'react';
+import StateNavLink from '../../../modules/state_router/StateNavLink';
 
 interface IdentityMenuItemProps {
     id?: string;
@@ -26,15 +25,14 @@ export default function LayoutAsideNavItem({
     onClick,
     target,
 }: IdentityMenuItemProps) {
-    const to = getStateRouteUrl(route, routeParams);
-
     return (
         show && (
-            <NavLink
+            <StateNavLink
                 id={id}
                 onClick={onClick}
-                to={to || '/'}
-                data-dusk={dusk}
+                name={route}
+                params={routeParams}
+                dataDusk={dusk}
                 target={target}
                 className="sidebar-nav-item">
                 <div className="sidebar-nav-item-arrow">
@@ -47,7 +45,7 @@ export default function LayoutAsideNavItem({
                     <img src={`./assets/img/menu/icon-${icon}-active.svg`} alt="Item" className={'active'} />
                 </div>
                 {name}
-            </NavLink>
+            </StateNavLink>
         )
     );
 }

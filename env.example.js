@@ -34,6 +34,7 @@ fronts['webshop.general'] = {
     client_key: 'general',
     client_type: 'webshop',
     name: 'General webshop',
+    default_title: 'General webshop',
     useHashRouter: use_hash_router,
     config: {
         api_url: api_url,
@@ -60,6 +61,7 @@ fronts['webshop.nijmegen'] = {
     client_key: 'nijmegen',
     client_type: 'webshop',
     name: 'Nijmegen webshop',
+    default_title: 'Nijmegen webshop',
     useHashRouter: use_hash_router,
 };
 
@@ -69,6 +71,7 @@ fronts['dashboard.sponsor'] = {
     client_type: 'sponsor',
     // webRoot: 'dashboard.sponsor',
     name: 'Sponsor dashboard',
+    default_title: 'Sponsor dashboard',
     useHashRouter: use_hash_router,
     config: {
         api_url: api_url,
@@ -94,6 +97,7 @@ fronts['dashboard.provider'] = {
     client_key: 'general',
     client_type: 'provider',
     name: 'Provider dashboard',
+    default_title: 'Provider dashboard',
     // webRoot: 'dashboard.provider',
     useHashRouter: use_hash_router,
     config: {
@@ -120,6 +124,7 @@ fronts['dashboard.validator'] = {
     client_key: baseImplementationKey,
     client_type: 'validator',
     name: 'Validator dashboard',
+    default_title: 'Validator dashboard',
     // webRoot: 'dashboard.validator',
     useHashRouter: use_hash_router,
     config: {

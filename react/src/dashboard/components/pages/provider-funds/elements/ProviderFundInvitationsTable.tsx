@@ -233,7 +233,7 @@ export default function ProviderFundInvitationsTable({
                                                             target="_blank"
                                                             className="text-strong text-md text-muted-dark text-inherit"
                                                             rel="noreferrer">
-                                                            {strLimit(invitation.fund.implementation.name, 32)}
+                                                            {strLimit(invitation.fund.implementation?.name, 32)}
                                                         </a>
                                                     </div>
                                                 </div>

@@ -37,6 +37,7 @@ import usePaginatorService from '../../../modules/paginator/services/usePaginato
 import ClickOutside from '../../elements/click-outside/ClickOutside';
 import useTranslate from '../../../hooks/useTranslate';
 import classNames from 'classnames';
+import TableEmptyValue from '../../elements/table-empty-value/TableEmptyValue';
 
 export default function Transactions() {
     const envData = useEnvData();
@@ -975,7 +976,7 @@ export default function Transactions() {
                                                                     </div>
                                                                 </div>
                                                             ) : (
-                                                                <span className={'text-muted'}>-</span>
+                                                                <TableEmptyValue />
                                                             )}
                                                         </td>
                                                     )}

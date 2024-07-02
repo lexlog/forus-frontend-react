@@ -1,11 +1,10 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import { ResponseError } from '../../../../props/ApiResponses';
-import { NavLink } from 'react-router-dom';
 import usePushDanger from '../../../../hooks/usePushDanger';
 import { useFundService } from '../../../../services/FundService';
 import usePushSuccess from '../../../../hooks/usePushSuccess';
 import FundProvider from '../../../../props/models/FundProvider';
-import { getStateRouteUrl } from '../../../../modules/state_router/Router';
+import StateNavLink from '../../../../modules/state_router/StateNavLink';
 import Organization from '../../../../props/models/Organization';
 import useConfirmFundProviderUpdate from '../hooks/useConfirmFundProviderUpdate';
 import useAssetUrl from '../../../../hooks/useAssetUrl';
@@ -56,10 +55,11 @@ export default function FundProviderTableItem({
     const updateFundProviderState = useCallback(
         (fundProvider: FundProvider, accepted: boolean) => {
             const state = accepted ? 'accepted' : 'rejected';
+
             setSubmittingState(state);
 
             confirmFundProviderUpdate(fundProvider, state)
-                .then((data) => updateProvider(fundProvider, data))
+                .then((data) => data && updateProvider(fundProvider, data))
                 .catch((r) => r)
                 .finally(() => setSubmittingState(null));
         },
@@ -199,16 +199,17 @@ export default function FundProviderTableItem({
                         </button>
                     )}
 
-                <NavLink
-                    to={getStateRouteUrl('fund-provider', {
+                <StateNavLink
+                    name={'fund-provider'}
+                    params={{
                         id: fundProvider.id,
                         fundId: fundProvider.fund_id,
                         organizationId: organization.id,
-                    })}
+                    }}
                     className={`button button-sm button-default ${submittingState ? 'disabled' : ''}`}>
                     <em className="mdi mdi-eye-outline icon-start" />
                     Bekijk aanbod
-                </NavLink>
+                </StateNavLink>
             </td>
         </tr>
     );

@@ -32,7 +32,7 @@ export default function SelectControlOptions<T>({
     return (
         <div
             id={id}
-            className={`select-control ${disabled ? 'disabled' : ''} ${className ? className : ''}`}
+            className={`form-control select-control ${disabled ? 'disabled' : ''} ${className ? className : ''}`}
             tabIndex={0}
             role="button"
             data-dusk={dusk}

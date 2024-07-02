@@ -348,7 +348,7 @@ export default function ProviderAvailableFundsTable({
                                                             target="_blank"
                                                             className="text-strong text-md text-muted-dark text-inherit"
                                                             rel="noreferrer">
-                                                            {strLimit(fund.implementation.name, 32)}
+                                                            {strLimit(fund.implementation?.name, 32)}
                                                         </a>
                                                     </div>
                                                 </div>

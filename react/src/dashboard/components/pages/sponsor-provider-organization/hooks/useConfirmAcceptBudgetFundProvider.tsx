@@ -64,6 +64,7 @@ export default function useConfirmAcceptBudgetFundProvider() {
                                 allow_products: data.fields.includes('allow_products'),
                             });
                         }}
+                        onCancel={() => resolve(null)}
                     />
                 ));
             });

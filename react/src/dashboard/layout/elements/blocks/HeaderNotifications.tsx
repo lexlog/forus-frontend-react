@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Organization from '../../../props/models/Organization';
 import { useNotificationService } from '../../../services/NotificationService';
 import ClickOutside from '../../../components/elements/click-outside/ClickOutside';
-import { NavLink } from 'react-router-dom';
-import { getStateRouteUrl } from '../../../modules/state_router/Router';
+import StateNavLink from '../../../modules/state_router/StateNavLink';
 import { PaginationData } from '../../../props/ApiResponses';
 import Notification from '../../../props/models/Notification';
 import useEnvData from '../../../hooks/useEnvData';
@@ -99,13 +98,14 @@ export default function HeaderNotifications({ organization }: { organization: Or
                             Nieuwe notificaties
                             {parseInt(notifications?.meta?.total_unseen?.toString()) > 0 &&
                                 ` (${notifications.meta.total_unseen} nieuw)`}
-                            <NavLink
-                                to={getStateRouteUrl('organization-notifications', { organizationId: organization.id })}
+                            <StateNavLink
+                                name={'organization-notifications'}
+                                params={{ organizationId: organization.id }}
                                 onClick={() => setShowNotifications(false)}
                                 className="notifications-menu-header-link">
                                 Bekijk alles
                                 <em className="mdi mdi-arrow-right" />
-                            </NavLink>
+                            </StateNavLink>
                         </div>
                         <div className="notifications-menu-body">
                             {notifications?.data.map((notification) => (

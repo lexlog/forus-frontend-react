@@ -27,6 +27,7 @@ import useSetProgress from '../../../hooks/useSetProgress';
 import LoadingCard from '../../elements/loading-card/LoadingCard';
 import useTranslate from '../../../hooks/useTranslate';
 import classNames from 'classnames';
+import TableEmptyValue from '../../elements/table-empty-value/TableEmptyValue';
 
 export default function Reimbursements() {
     const activeOrganization = useActiveOrganization();
@@ -488,9 +489,7 @@ export default function Reimbursements() {
                                                         </span>
                                                     )}
 
-                                                    {!reimbursement.voucher_transaction && (
-                                                        <span className="text-muted">-</span>
-                                                    )}
+                                                    {!reimbursement.voucher_transaction && <TableEmptyValue />}
                                                 </td>
 
                                                 <td>

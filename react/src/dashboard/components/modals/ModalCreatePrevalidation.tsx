@@ -14,6 +14,7 @@ import { ResponseError } from '../../props/ApiResponses';
 import { dateFormat, dateParse } from '../../helpers/dates';
 import useSetProgress from '../../hooks/useSetProgress';
 import usePushDanger from '../../hooks/usePushDanger';
+import TableEmptyValue from '../elements/table-empty-value/TableEmptyValue';
 
 export default function ModalCreatePrevalidation({
     fund,
@@ -183,7 +184,7 @@ export default function ModalCreatePrevalidation({
                                                     {form.values[fundRecord] ? (
                                                         form.values[fundRecord]
                                                     ) : (
-                                                        <span className={'text-muted'}>-</span>
+                                                        <TableEmptyValue />
                                                     )}
                                                 </div>
                                             </div>

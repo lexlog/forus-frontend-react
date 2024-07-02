@@ -85,7 +85,7 @@ export default function ProviderOrganizationOverview({
             setSubmittingState(state);
 
             confirmFundProviderUpdate(fundProvider, state)
-                .then((data) => updateProvider(data))
+                .then((data) => data && updateProvider(data))
                 .catch((r) => r)
                 .finally(() => setSubmittingState(null));
         },

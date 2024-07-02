@@ -33,6 +33,7 @@ export default function ModalSwitchBankConnectionAccount({
                 .then((res) => {
                     onChange(res.data.data);
                     pushSuccess('Succes!', 'Het actieve bankaccount is gewijzigd!');
+                    modal.close();
                 })
                 .catch((err: ResponseError) => form.setErrors(err?.data?.errors))
                 .finally(() => form.setIsLocked(false));

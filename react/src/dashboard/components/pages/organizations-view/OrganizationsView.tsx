@@ -1,14 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 import { useOrganizationService } from '../../../services/OrganizationService';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getStateRouteUrl } from '../../../modules/state_router/Router';
+import { useParams } from 'react-router-dom';
+import { useNavigateState } from '../../../modules/state_router/Router';
 import { mainContext } from '../../../contexts/MainContext';
 
 export default function OrganizationsView() {
     const { id } = useParams();
     const { fetchOrganizations, setOrganizations, setActiveOrganization } = useContext(mainContext);
     const organizationService = useOrganizationService();
-    const navigate = useNavigate();
+    const navigateState = useNavigateState();
 
     useEffect(() => {
         fetchOrganizations().then((organizations) => {
@@ -20,9 +20,9 @@ export default function OrganizationsView() {
             }
 
             setOrganizations(organizations);
-            navigate(getStateRouteUrl('organizations'));
+            navigateState('organizations');
         });
-    }, [fetchOrganizations, navigate, organizationService, setActiveOrganization, setOrganizations, id]);
+    }, [fetchOrganizations, navigateState, organizationService, setActiveOrganization, setOrganizations, id]);
 
     return <></>;
 }

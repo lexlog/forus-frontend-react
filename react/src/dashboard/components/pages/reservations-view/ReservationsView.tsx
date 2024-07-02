@@ -19,6 +19,7 @@ import TransactionDetails from '../transactions-view/elements/TransactionDetails
 import ReservationExtraPaymentRefunds from './elements/ReservationExtraPaymentRefunds';
 import ReservationExtraPaymentDetails from './elements/ReservationExtraPaymentDetails';
 import useTranslate from '../../../hooks/useTranslate';
+import TableEmptyValue from '../../elements/table-empty-value/TableEmptyValue';
 
 export default function ReservationsView() {
     const { id } = useParams();
@@ -289,7 +290,7 @@ export default function ReservationsView() {
                                             {reservation.accepted_at ? (
                                                 <strong className="text-black">{reservation.accepted_at_locale}</strong>
                                             ) : (
-                                                <span className="text-muted">-</span>
+                                                <TableEmptyValue />
                                             )}
                                         </td>
                                         <td>
@@ -300,7 +301,7 @@ export default function ReservationsView() {
                                             {reservation.rejected_at ? (
                                                 <strong className="text-black">{reservation.rejected_at_locale}</strong>
                                             ) : (
-                                                <span className="text-muted">-</span>
+                                                <TableEmptyValue />
                                             )}
                                         </td>
                                     </tr>

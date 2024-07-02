@@ -41,6 +41,7 @@ export default function ModalExportDataSelect({
     sections,
     required = true,
     onSuccess,
+    onCancel,
 }: {
     modal: ModalState;
     title?: string;
@@ -49,6 +50,7 @@ export default function ModalExportDataSelect({
     required?: boolean;
     description?: string | Array<string>;
     onSuccess: (values: object) => void;
+    onCancel?: () => void;
 }) {
     const translate = useTranslate();
     const [localSections, setLocalSections] = React.useState<Array<ExportSectionPropLocal>>(null);
@@ -93,6 +95,11 @@ export default function ModalExportDataSelect({
         [localSections],
     );
 
+    const closeModal = useCallback(() => {
+        modal.close();
+        onCancel?.();
+    }, [modal, onCancel]);
+
     const onSubmit = useCallback(() => {
         const values = localSections.reduce((values, section) => {
             if (section.type === 'radio') {
@@ -136,14 +143,14 @@ export default function ModalExportDataSelect({
 
     return (
         <div className={`modal modal-md modal-animated ${modal.loading ? 'modal-loading' : ''} ${className}`}>
-            <div className="modal-backdrop" onClick={modal.close} />
+            <div className="modal-backdrop" onClick={closeModal} />
             <form
                 className="modal-window form"
                 onSubmit={(e) => {
                     e.preventDefault();
                     onSubmit();
                 }}>
-                <div className="modal-close mdi mdi-close" onClick={modal.close} />
+                <div className="modal-close mdi mdi-close" onClick={closeModal} />
                 <div className="modal-header">{title ? title : translate('modals.modal_export_data.title')}</div>
 
                 <div className="modal-body">
@@ -246,7 +253,7 @@ export default function ModalExportDataSelect({
                     </div>
                 </div>
                 <div className="modal-footer text-center">
-                    <button className="button button-default" type="button" onClick={modal.close}>
+                    <button className="button button-default" type="button" onClick={closeModal}>
                         {translate('modals.modal_voucher_create.buttons.cancel')}
                     </button>
                     <button className="button button-primary" disabled={!isValid} type="submit">

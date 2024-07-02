@@ -28,6 +28,7 @@ import EventLogsTable from '../../elements/tables/EventLogsTable';
 import ModalOrderPhysicalCard from '../../modals/ModalOrderPhysicalCard';
 import useTranslate from '../../../hooks/useTranslate';
 import useShowVoucherQrCode from '../vouchers/hooks/useShowVoucherQrCode';
+import usePushApiError from '../../../hooks/usePushApiError';
 
 export default function VouchersViewComponent() {
     const { id } = useParams();
@@ -39,6 +40,7 @@ export default function VouchersViewComponent() {
     const showQrCode = useShowVoucherQrCode();
     const setProgress = useSetProgress();
     const pushSuccess = usePushSuccess();
+    const pushApiError = usePushApiError();
 
     const fundService = useFundService();
     const voucherService = useVoucherService();
@@ -93,8 +95,9 @@ export default function VouchersViewComponent() {
         voucherService
             .show(activeOrganization.id, parseInt(id))
             .then((res) => setVoucher(res.data.data))
+            .catch(pushApiError)
             .finally(() => setProgress(100));
-    }, [activeOrganization.id, id, setProgress, voucherService]);
+    }, [activeOrganization.id, id, setProgress, voucherService, pushApiError]);
 
     const fetchFund = useCallback(
         (voucher: Voucher) => {

@@ -127,7 +127,7 @@ export default function ImplementationsView() {
                             </StateNavLink>
                         )}
 
-                        {hasPermission(activeOrganization, ['manage_implementation', 'manage_implementation_cms']) && (
+                        {hasPermission(activeOrganization, ['manage_implementation_cms']) && (
                             <StateNavLink
                                 name={'implementations-cms'}
                                 params={{ id: implementation.id, organizationId: implementation.organization_id }}

@@ -24,10 +24,10 @@ import useOpenModal from '../../../hooks/useOpenModal';
 import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 import Paginator from '../../../modules/paginator/components/Paginator';
 import EmptyCard from '../../elements/empty-card/EmptyCard';
-import { useNavigateState } from '../../../modules/state_router/Router';
 import ModalFundTopUp from '../../modals/ModalFundTopUp';
 import useTranslate from '../../../hooks/useTranslate';
 import useAssetUrl from '../../../hooks/useAssetUrl';
+import TableEmptyValue from '../../elements/table-empty-value/TableEmptyValue';
 
 export default function OrganizationFunds() {
     const translate = useTranslate();
@@ -36,7 +36,6 @@ export default function OrganizationFunds() {
     const pushSuccess = usePushSuccess();
     const assetUrl = useAssetUrl();
     const openModal = useOpenModal();
-    const navigateState = useNavigateState();
     const activeOrganization = useActiveOrganization();
 
     const fundService = useFundService();
@@ -381,15 +380,12 @@ export default function OrganizationFunds() {
 
                                 <tbody>
                                     {funds.data.map((fund) => (
-                                        <tr
+                                        <StateNavLink
                                             key={fund.id}
-                                            className={'cursor-pointer'}
-                                            onClick={() =>
-                                                navigateState('funds-show', {
-                                                    organizationId: activeOrganization.id,
-                                                    fundId: fund.id,
-                                                })
-                                            }>
+                                            name={'funds-show'}
+                                            params={{ organizationId: activeOrganization.id, fundId: fund.id }}
+                                            customElement={'tr'}
+                                            className={'cursor-pointer'}>
                                             <td>
                                                 <div className="td-entity-main">
                                                     <div className="td-entity-main-media">
@@ -414,7 +410,9 @@ export default function OrganizationFunds() {
                                                 </div>
                                             </td>
 
-                                            <td className="text-strong text-muted-dark">{fund.implementation?.name}</td>
+                                            <td className="text-strong text-muted-dark">
+                                                {fund?.implementation?.name || <TableEmptyValue />}
+                                            </td>
 
                                             {funds_type == 'active' && (
                                                 <Fragment>
@@ -434,12 +432,14 @@ export default function OrganizationFunds() {
                                             )}
 
                                             <td>
-                                                {!fund.archived && stateLabels[fund.state] && (
+                                                {!fund.archived && stateLabels[fund.state] ? (
                                                     <span className={`label ${stateLabels[fund.state] || ''}`}>
                                                         {translate(
                                                             `components.organization_funds.states.${fund.state}`,
                                                         )}
                                                     </span>
+                                                ) : (
+                                                    <TableEmptyValue />
                                                 )}
 
                                                 {fund.archived && (
@@ -544,7 +544,7 @@ export default function OrganizationFunds() {
                                                     )
                                                 )}
                                             </td>
-                                        </tr>
+                                        </StateNavLink>
                                     ))}
                                 </tbody>
                             </table>

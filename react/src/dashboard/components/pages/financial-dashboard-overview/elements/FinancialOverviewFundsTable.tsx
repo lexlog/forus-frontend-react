@@ -6,6 +6,7 @@ import useExportFunds from '../hooks/useExportFunds';
 import Organization from '../../../../props/models/Organization';
 import { FinancialOverview } from '../../financial-dashboard/types/FinancialStatisticTypes';
 import useTranslate from '../../../../hooks/useTranslate';
+import TableEmptyValue from '../../../elements/table-empty-value/TableEmptyValue';
 
 export default function FinancialOverviewFundsTable({
     funds,
@@ -59,10 +60,10 @@ export default function FinancialOverviewFundsTable({
                                 {funds.map((fund) => (
                                     <tr key={fund.id}>
                                         <td>{fund.name}</td>
-                                        <td>{fund.budget.total_locale}</td>
-                                        <td>{fund.budget.used_locale}</td>
-                                        <td>{fund.budget.left_locale}</td>
-                                        <td className={'text-right'}>{fund.budget.transaction_costs_locale}</td>
+                                        <td>{fund.budget?.total_locale || <TableEmptyValue />}</td>
+                                        <td>{fund.budget?.used_locale || <TableEmptyValue />}</td>
+                                        <td>{fund.budget?.left_locale || <TableEmptyValue />}</td>
+                                        <td className={'text-right'}>{fund.budget?.transaction_costs_locale}</td>
                                     </tr>
                                 ))}
 

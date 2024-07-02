@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import useAssetUrl from '../../../hooks/useAssetUrl';
-import { NavLink } from 'react-router-dom';
-import { getStateRouteUrl } from '../../../modules/state_router/Router';
 import { get } from 'lodash';
 import Fund from '../../../props/models/Fund';
+import StateNavLink from '../../../modules/state_router/StateNavLink';
 
 export default function Auth2FARestriction({
     type,
@@ -46,10 +45,10 @@ export default function Auth2FARestriction({
                             accountaanpassingen kunnen worden gemaakt.
                         </div>
                         <div className="button-group">
-                            <NavLink className="button button-primary button-sm" to={getStateRouteUrl('security-2fa')}>
-                                <div className="icon-start mdi mdi-lock-outline"></div>
+                            <StateNavLink className="button button-primary button-sm" name={'security-2fa'}>
+                                <div className="icon-start mdi mdi-lock-outline" />
                                 Tweefactorauthenticatie instellen
-                            </NavLink>
+                            </StateNavLink>
                         </div>
                     </div>
                 )}
@@ -66,10 +65,10 @@ export default function Auth2FARestriction({
                             accountaanpassingen kunnen worden gemaakt.
                         </div>
                         <div className="button-group">
-                            <NavLink className="button button-primary button-sm" to={getStateRouteUrl('security-2fa')}>
+                            <StateNavLink className="button button-primary button-sm" name={'security-2fa'}>
                                 <div className="icon-start mdi mdi-lock-outline" />
                                 Tweefactorauthenticatie instellen
-                            </NavLink>
+                            </StateNavLink>
                         </div>
                     </div>
                 )}
@@ -86,10 +85,10 @@ export default function Auth2FARestriction({
                             accountaanpassingen kunnen worden gemaakt.
                         </div>
                         <div className="button-group">
-                            <NavLink className="button button-primary button-sm" to={getStateRouteUrl('security-2fa')}>
+                            <StateNavLink className="button button-primary button-sm" name={'security-2fa'}>
                                 <div className="icon-start mdi mdi-lock-outline" />
                                 Tweefactorauthenticatie instellen
-                            </NavLink>
+                            </StateNavLink>
                         </div>
                     </div>
                 )}

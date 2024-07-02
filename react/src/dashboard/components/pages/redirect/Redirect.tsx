@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink, useSearchParams } from 'react-router-dom';
-import { getStateRouteUrl } from '../../../modules/state_router/Router';
+import { useSearchParams } from 'react-router-dom';
 import useAssetUrl from '../../../hooks/useAssetUrl';
+import StateNavLink from '../../../modules/state_router/StateNavLink';
 
 // todo: investigate
 export default function Redirect() {
@@ -25,12 +25,12 @@ export default function Redirect() {
                     </div>
 
                     <div className="block-email-confirmed-footer">
-                        <NavLink
-                            to={getStateRouteUrl('organizations')}
-                            data-dusk="identityEmailConfirmedButton"
+                        <StateNavLink
+                            name={'organizations'}
+                            dataDusk="identityEmailConfirmedButton"
                             className="button button-primary button-lg">
                             Bekijken
-                        </NavLink>
+                        </StateNavLink>
                     </div>
                 </div>
             </>

@@ -82,7 +82,7 @@ export default function VouchersTableRow({
                     <div className="text-primary text-medium">{strLimit(voucher.fund.name, 32)}</div>
 
                     <div className="text-strong text-md text-muted-dark">
-                        {strLimit(voucher.fund.implementation.name, 32)}
+                        {strLimit(voucher.fund.implementation?.name, 32)}
                     </div>
                 </td>
             )}

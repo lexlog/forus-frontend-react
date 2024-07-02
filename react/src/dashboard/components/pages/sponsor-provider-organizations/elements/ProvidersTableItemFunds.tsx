@@ -61,7 +61,7 @@ export default function ProvidersTableItemFunds({
                                                     {strLimit(fundProvider.fund.name, 40)}
                                                 </div>
                                                 <div className="text-strong text-md text-muted-dark">
-                                                    {strLimit(fundProvider.fund.implementation.name, 40)}
+                                                    {strLimit(fundProvider.fund.implementation?.name, 40)}
                                                 </div>
                                             </div>
                                         </div>

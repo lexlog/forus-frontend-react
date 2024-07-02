@@ -5,6 +5,7 @@ import FundProviderUnsubscribe from '../../../../props/models/FundProviderUnsubs
 import useAssetUrl from '../../../../hooks/useAssetUrl';
 import StateNavLink from '../../../../modules/state_router/StateNavLink';
 import Tooltip from '../../../elements/tooltip/Tooltip';
+import TableEmptyValue from '../../../elements/table-empty-value/TableEmptyValue';
 
 export default function SponsorFundUnsubscriptionTableItem({
     organization,
@@ -69,7 +70,7 @@ export default function SponsorFundUnsubscriptionTableItem({
                         )}
                     </div>
                 ) : (
-                    <div className={'text-muted'}>-</div>
+                    <TableEmptyValue />
                 )}
             </td>
 

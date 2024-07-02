@@ -108,6 +108,7 @@ export default function VouchersTableHeader({
                                 <button
                                     id="create_voucher"
                                     className="button button-primary"
+                                    disabled={funds?.filter((fund) => fund.id)?.length < 1}
                                     onClick={() => createVoucher(funds, filter.activeValues?.fund_id, fetchVouchers)}>
                                     <em className="mdi mdi-plus-circle icon-start" />
                                     {translate('vouchers.buttons.add_new')}
@@ -116,6 +117,7 @@ export default function VouchersTableHeader({
                                 <button
                                     id="voucher_upload_csv"
                                     className="button button-primary"
+                                    disabled={funds?.filter((fund) => fund.id)?.length < 1}
                                     onClick={() => uploadVouchers(funds, filter.activeValues?.fund_id, fetchVouchers)}
                                     data-dusk="uploadVouchersBatchButton">
                                     <em className="mdi mdi-upload icon-start" />

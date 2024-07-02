@@ -111,15 +111,6 @@ export default function SubsidyFundProducts({
                 </div>
             </div>
 
-            {fundProvider.allow_products && products.meta.total > 0 && (
-                <div className="card-section card-section-success card-section-narrow">
-                    <em>
-                        U kunt niet individuele producten uitzetten terwijl een globale instelling aan staat. Zet de
-                        globale instelling uit om individuele producten goed te keuren.
-                    </em>
-                </div>
-            )}
-
             {products.meta.total > 0 ? (
                 <div className="card-section card-section-padless">
                     <div className="table-wrapper">
