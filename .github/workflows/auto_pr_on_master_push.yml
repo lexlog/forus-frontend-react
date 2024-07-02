@@ -17,9 +17,6 @@ jobs:
           ref: master
 
       - name: Checkout develop branch
-        run: git fetch origin develop:develop
-
-      - name: Checkout develop branch
         run: git checkout develop
 
       - name: Check for differences between master and develop
