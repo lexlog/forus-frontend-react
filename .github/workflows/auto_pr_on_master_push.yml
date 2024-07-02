@@ -19,17 +19,8 @@ jobs:
       - name: Checkout develop branch
         run: git fetch origin develop:develop
 
-      - name: Fetch all branches
-        run: git fetch --all
-
       - name: Checkout develop branch
         run: git checkout develop
-
-      - name: Show git status
-        run: git status
-
-      - name: Show branches
-        run: git branch -a
 
       - name: Check for differences between master and develop
         id: check_diff
