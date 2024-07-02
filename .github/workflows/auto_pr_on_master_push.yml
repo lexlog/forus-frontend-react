@@ -24,10 +24,16 @@ jobs:
         run: |
           git diff --name-status $(git merge-base develop master) master | tee changes.txt
           if [ -s changes.txt ]; then
+            echo "Changes detected"
             echo "changes_exist=true" >> $GITHUB_ENV
           else
+            echo "No changes detected"
             echo "changes_exist=false" >> $GITHUB_ENV
           fi
+
+      - name: Print environment variables
+        run: |
+          echo "changes_exist=${{ env.changes_exist }}"
 
       - name: Get current date
         id: get-date
