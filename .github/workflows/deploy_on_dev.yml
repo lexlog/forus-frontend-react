@@ -1,0 +1,21 @@
+name: Deploy to production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+            host: ${{ secrets.DEV_ENV_HOST }}
+            username: ${{ secrets.DEV_ENV_USERNAME }}
+            key: ${{ secrets.DEV_ENV_KEY }}
+            script: | 
+                cd /var/www/html/forus-frontend
+                ls -la
+
