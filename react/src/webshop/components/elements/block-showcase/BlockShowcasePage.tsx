@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import BlockBreadcrumbs, { Breadcrumb } from '../block-breadcrumbs/BlockBreadcrumbs';
 import ReadSpeakerButton from '../../../modules/read_speaker/ReadSpeakerButton';
 import useIsMobile from '../../../hooks/useIsMobile';
+import { clickOnKeyEnter } from '../../../../dashboard/helpers/wcag';
 
 export default function BlockShowcasePage({
     aside = null,
@@ -48,6 +49,9 @@ export default function BlockShowcasePage({
                     <div
                         className="mobile-filters-icon"
                         onClick={toggleMobileMenu}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={clickOnKeyEnter}
                         aria-label="Filteren"
                         aria-expanded={showModalFilters}
                         aria-controls={'aside-mobile'}>

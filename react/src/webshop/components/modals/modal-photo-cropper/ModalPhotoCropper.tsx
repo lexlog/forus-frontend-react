@@ -350,6 +350,7 @@ export default function ModalPhotoCropper({
                                     tabIndex={0}
                                     onKeyDown={clickOnKeyEnter}
                                     onClick={prevMedia}
+                                    aria-label="Vorige"
                                     title="Vorige">
                                     <em className="mdi mdi-chevron-left" />
                                 </div>
@@ -362,6 +363,7 @@ export default function ModalPhotoCropper({
                                             onKeyDown={clickOnKeyEnter}
                                             className={`cropper-pagination-item ${index === fileIndex ? 'active' : ''}`}
                                             onClick={() => setFileIndex(index)}
+                                            aria-label={`Toon afbeelding nummer: ${index + 1}`}
                                         />
                                     ))}
                                 </div>
@@ -371,6 +373,7 @@ export default function ModalPhotoCropper({
                                     tabIndex={0}
                                     onKeyDown={clickOnKeyEnter}
                                     onClick={nextMedia}
+                                    aria-label="Volgende"
                                     title="Volgende">
                                     <em className="mdi mdi-chevron-right" />
                                 </div>
@@ -385,6 +388,7 @@ export default function ModalPhotoCropper({
                                             tabIndex={0}
                                             onKeyDown={clickOnKeyEnter}
                                             onClick={() => rotate(fileIndex, -90)}
+                                            aria-label="90 graden rechtsom draaien"
                                             title="90 graden rechtsom draaien">
                                             <div className="mdi mdi-file-rotate-left-outline" />
                                         </div>
@@ -397,6 +401,7 @@ export default function ModalPhotoCropper({
                                             tabIndex={0}
                                             onKeyDown={clickOnKeyEnter}
                                             onClick={() => rotate(fileIndex, 90)}
+                                            aria-label="90 graden linkssom draaien"
                                             title="90 graden linkssom draaien">
                                             <div className="mdi mdi-file-rotate-right-outline" />
                                         </div>

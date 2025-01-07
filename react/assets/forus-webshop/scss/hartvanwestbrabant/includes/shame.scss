@@ -1,23 +1,7 @@
-.block.block-footer .footer-nav .footer-nav-item a {
-    font: 400 14px/24px var(--base-font);
-    color: #ffffff;
-}
-
 .section-title, .block-title {
     color: #24A1A1;
 }
 
-@media screen and (max-width: 1000px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        color: #ffffff;
-    }
-}
-
-@media screen and (max-width: 1700px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        color: #ffffff;
-    }
-}
 .block {
     &.block-copyrights{
         .links{

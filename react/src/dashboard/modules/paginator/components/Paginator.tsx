@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import FilterModel from '../../../types/FilterModel';
 import FilterSetter from '../../../types/FilterSetter';
 import { ApiPaginationMetaProp } from '../../../props/ApiResponses';
@@ -8,6 +8,7 @@ import SelectControlOptions from '../../../components/elements/select-control/te
 import { clickOnKeyEnter } from '../../../helpers/wcag';
 import useTranslate from '../../../hooks/useTranslate';
 import classNames from 'classnames';
+import useProgress from '../../../hooks/useProgress';
 
 export default function Paginator({
     meta,
@@ -16,6 +17,7 @@ export default function Paginator({
     updateFilters,
     perPageKey,
     className = '',
+    loadingProvider = 'progress',
 }: {
     meta: ApiPaginationMetaProp;
     filters: FilterModel;
@@ -23,13 +25,24 @@ export default function Paginator({
     countButtons?: number;
     perPageKey?: string;
     className?: string;
+    loadingProvider?: 'progress';
 }) {
     const translate = useTranslate();
+    const progress = useProgress();
 
     const [pages, setPages] = useState([]);
+    const [loadingPage, setLoadingPage] = useState(null);
     const { perPageOptions, setPerPage } = usePaginatorService();
 
-    const getPages = useCallback((meta, countButtons = 5) => {
+    const loading = useMemo(() => {
+        if (loadingProvider === 'progress') {
+            return progress < 100;
+        }
+
+        return false;
+    }, [loadingProvider, progress]);
+
+    const getPages = useCallback((meta: ApiPaginationMetaProp, countButtons = 5) => {
         let fromPage = Math.max(1, meta.current_page - Math.round(countButtons / 2 - 1));
         const pages = [];
 
@@ -45,8 +58,9 @@ export default function Paginator({
     }, []);
 
     const setPage = useCallback(
-        (page) => {
+        (page: number) => {
             updateFilters({ page });
+            setLoadingPage(page);
         },
         [updateFilters],
     );
@@ -79,6 +93,12 @@ export default function Paginator({
         }
     }, [meta, setPage]);
 
+    useEffect(() => {
+        if (loadingPage && meta?.current_page && meta?.current_page === loadingPage) {
+            setLoadingPage(null);
+        }
+    }, [meta?.current_page, loadingPage]);
+
     return (
         <div className={`table-pagination form ${className}`}>
             {meta.from && meta.to && (
@@ -110,19 +130,21 @@ export default function Paginator({
                     onClick={() => setPage(1)}
                     onKeyDown={clickOnKeyEnter}
                     tabIndex={meta.current_page === 1 ? undefined : 0}
-                    disabled={meta.current_page === 1}
+                    disabled={loading || meta.current_page === 1}
                     className={`table-pagination-button`}>
                     {translate('paginator.buttons.first')}
                 </button>
-                {pages.map((page, key) => (
+                {pages.map((page) => (
                     <button
-                        key={key}
+                        key={page}
                         tabIndex={0}
                         onClick={() => setPage(page)}
+                        disabled={loading && meta.current_page !== page && loadingPage !== page}
                         onKeyDown={clickOnKeyEnter}
                         className={classNames(
                             'table-pagination-button',
                             page === meta.current_page && 'table-pagination-button-active',
+                            page === loadingPage && 'table-pagination-button-loading',
                         )}>
                         <span className="wcag-hidden">{translate('paginator.buttons.wcag_page')} </span>
                         {page}
@@ -131,7 +153,7 @@ export default function Paginator({
                 <button
                     onClick={() => setPage(meta.last_page)}
                     onKeyDown={clickOnKeyEnter}
-                    disabled={meta.current_page === meta.last_page}
+                    disabled={loading || meta.current_page === meta.last_page}
                     tabIndex={meta.current_page === meta.last_page ? undefined : 0}
                     className={`table-pagination-button`}>
                     {translate('paginator.buttons.last')}

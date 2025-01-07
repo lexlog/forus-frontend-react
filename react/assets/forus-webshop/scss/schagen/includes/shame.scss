@@ -227,16 +227,6 @@
 .block {
     &.block-footer {
         .block {
-
-            .footer-nav {
-                .footer-nav-item {
-                    a {
-                        color: #fff;
-                        font: 500 16px/24px var(--base-font);
-                    }
-                }
-            }
-
             &.block-markdown {
                 a:not(.button) {
                     color: #fff;
@@ -275,24 +265,6 @@
                 color: #fff;
             }
         }
-    }
-}
-
-// MOVE TO LAYOUT FOOTER FILE
-.block.block-footer .footer-nav .footer-nav-item a {
-    font: 400 14px/24px var(--base-font);
-    color: #ffffff;
-}
-
-@media screen and (max-width: 1000px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        color: #ffffff;
-    }
-}
-
-@media screen and (max-width: 1700px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        color: #ffffff;
     }
 }
 

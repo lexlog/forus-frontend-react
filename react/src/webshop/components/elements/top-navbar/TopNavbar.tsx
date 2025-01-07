@@ -43,6 +43,9 @@ export const TopNavbar = ({ hideOnScroll = false, className = '' }: { hideOnScro
     const translate = useTranslate();
     const authIdentity = useAuthIdentity();
 
+    const mobileNavBarRef = useRef<HTMLDivElement>(null);
+    // const { onKeyDown, onFocus, onBlur } = useReverseFocusKeyEventHandlers(mobileNavBarRef);
+
     const [visible, setVisible] = React.useState(false);
     const [prevWidth, setPrevWidth] = React.useState(null);
     const [prevOffsetY, setPrevOffsetY] = React.useState(0);
@@ -417,7 +420,37 @@ export const TopNavbar = ({ hideOnScroll = false, className = '' }: { hideOnScro
             {appConfigs.announcements && <Announcements announcements={appConfigs.announcements} />}
 
             {!showSearchBox && (
-                <div className="navbar-inner wrapper flex-horizontal-reverse">
+                <div className="navbar-inner wrapper" ref={mobileNavBarRef}>
+                    <div
+                        className={`button navbar-menu-button show-sm ${mobileMenuOpened ? 'active' : ''}`}
+                        aria-expanded={mobileMenuOpened}
+                        onClick={openMobileMenu}
+                        role={'button'}
+                        onKeyDown={clickOnKeyEnter}
+                        tabIndex={0}>
+                        <em className={`mdi ${mobileMenuOpened ? 'mdi-close' : 'mdi-menu'}`} />
+                        {mobileMenuOpened
+                            ? translate('topnavbar.items.menu.close')
+                            : translate('topnavbar.items.menu.show')}
+                    </div>
+
+                    <StateNavLink
+                        name={'home'}
+                        className="navbar-logo show-sm"
+                        title={`Terug naar hoofdpagina`}
+                        disabled={route?.state?.name === 'home'}
+                        tabIndex={0}>
+                        <img
+                            src={assetUrl(`/assets/img/logo-normal${logoExtension}`)}
+                            alt={translate(`logo_alt_text.${envData.client_key}`, {}, envData.client_key)}
+                        />
+                        <img
+                            className="hover"
+                            src={assetUrl(`/assets/img/logo-hover${logoExtension}`)}
+                            alt={translate(`logo_alt_text.${envData.client_key}`, {}, envData.client_key)}
+                        />
+                    </StateNavLink>
+
                     {envData.config?.flags?.genericSearch ? (
                         <div
                             className="button navbar-search-button show-sm"
@@ -433,35 +466,6 @@ export const TopNavbar = ({ hideOnScroll = false, className = '' }: { hideOnScro
                     ) : (
                         <div className="button navbar-search-button show-sm" aria-hidden="true" />
                     )}
-
-                    <StateNavLink
-                        name={'home'}
-                        className="navbar-logo show-sm"
-                        title={`Terug naar hoofdpagina`}
-                        disabled={route?.state?.name === 'home'}>
-                        <img
-                            src={assetUrl(`/assets/img/logo-normal${logoExtension}`)}
-                            alt={translate(`logo_alt_text.${envData.client_key}`, {}, envData.client_key)}
-                        />
-                        <img
-                            className="hover"
-                            src={assetUrl(`/assets/img/logo-hover${logoExtension}`)}
-                            alt={translate(`logo_alt_text.${envData.client_key}`, {}, envData.client_key)}
-                        />
-                    </StateNavLink>
-
-                    <div
-                        className={`button navbar-menu-button show-sm ${mobileMenuOpened ? 'active' : ''}`}
-                        aria-expanded={mobileMenuOpened}
-                        onClick={openMobileMenu}
-                        role={'button'}
-                        onKeyDown={clickOnKeyEnter}
-                        tabIndex={0}>
-                        <em className={`mdi ${mobileMenuOpened ? 'mdi-close' : 'mdi-menu'}`} />
-                        {mobileMenuOpened
-                            ? translate('topnavbar.items.menu.close')
-                            : translate('topnavbar.items.menu.show')}
-                    </div>
                 </div>
             )}
 

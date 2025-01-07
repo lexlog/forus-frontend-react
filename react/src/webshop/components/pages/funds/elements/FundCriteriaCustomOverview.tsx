@@ -37,24 +37,24 @@ export default function FundCriteriaCustomOverview({ fundKey }: { fundKey: strin
                             </tr>
                             <tr>
                                 <td>Alleenstaand</td>
-                                <td>€ 1.620,-</td>
-                                <td>€ 1.800,-</td>
-                                <td>€ 570,-</td>
-                                <td>€ 720,-</td>
+                                <td>€ 1.670,-</td>
+                                <td>€ 1.860,-</td>
+                                <td>€ 590,-</td>
+                                <td>€ 740,-</td>
                             </tr>
                             <tr>
                                 <td>Alleenstaande ouder</td>
-                                <td>€ 2.080,-</td>
-                                <td>€ 2.200,-</td>
-                                <td>€ 830,-</td>
-                                <td>€ 870,-</td>
+                                <td>€ 2.140,-</td>
+                                <td>€ 2.290,-</td>
+                                <td>€ 850,-</td>
+                                <td>€ 910,-</td>
                             </tr>
                             <tr>
                                 <td>Getrouwd/samenwonend</td>
-                                <td>€ 2.310,-</td>
-                                <td>€ 2.450,-</td>
-                                <td>€ 920,-</td>
-                                <td>€ 970,-</td>
+                                <td>€ 2.380,-</td>
+                                <td>€ 2.540,-</td>
+                                <td>€ 950,-</td>
+                                <td>€ 1.010,-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,24 +104,24 @@ export default function FundCriteriaCustomOverview({ fundKey }: { fundKey: strin
                             </tr>
                             <tr>
                                 <td>Alleenstaand</td>
-                                <td>€ 1.750,-</td>
-                                <td>€ 1.940,-</td>
-                                <td>€ 610,-</td>
-                                <td>€ 770,-</td>
+                                <td>€ 1.790,-</td>
+                                <td>€ 2.000,-</td>
+                                <td>€ 630,-</td>
+                                <td>€ 800,-</td>
                             </tr>
                             <tr>
                                 <td>Alleenstaande ouder</td>
-                                <td>€ 2.240,-</td>
-                                <td>€ 2.370,-</td>
-                                <td>€ 890,-</td>
-                                <td>€ 940,-</td>
+                                <td>€ 2.310,-</td>
+                                <td>€ 2.460,-</td>
+                                <td>€ 920,-</td>
+                                <td>€ 980,-</td>
                             </tr>
                             <tr>
                                 <td>Getrouwd/samenwonend</td>
-                                <td>€ 2.490,-</td>
-                                <td>€ 2.630,-</td>
-                                <td>€ 990,-</td>
-                                <td>€ 1.040,-</td>
+                                <td>€ 2.560,-</td>
+                                <td>€ 2.740,-</td>
+                                <td>€ 1.020,-</td>
+                                <td>€ 1.090,-</td>
                             </tr>
                         </tbody>
                     </table>

@@ -37,7 +37,11 @@
             background: var(--paginator-button-background);
             cursor: pointer;
             border: 1px solid var(--paginator-button-border);
-            transition: color .4s, background-color .4s, box-shadow .4s, border .4s;
+            transition:
+                color 0.4s,
+                background-color 0.4s,
+                box-shadow 0.4s,
+                border 0.4s;
             border-radius: var(--paginator-border-radius);
             display: inline-block;
             text-align: center;
@@ -47,6 +51,15 @@
             }
 
             &:hover {
+                @media screen and (min-width: 1000px) {
+                    color: var(--paginator-button-hover-color);
+                    border-color: var(--paginator-button-hover-background);
+                    background-color: var(--paginator-button-hover-background);
+                }
+            }
+
+            &:focus,
+            &.table-pagination-button-loading {
                 color: var(--paginator-button-hover-color);
                 border-color: var(--paginator-button-hover-background);
                 background-color: var(--paginator-button-hover-background);
@@ -60,6 +73,7 @@
 
             &[disabled] {
                 cursor: default;
+                pointer-events: none;
                 color: var(--paginator-button-disabled-color);
                 border-color: var(--paginator-button-disabled-border);
                 background-color: var(--paginator-button-disabled-background);
@@ -88,9 +102,18 @@
                 font: 700 13px/20px var(--base-font);
                 flex-grow: 1;
                 border-radius: 0;
+                transition: none;
 
                 &:not(:last-child) {
-                    border-right: none;
+                    border-right-color: transparent;
+                }
+
+                &:focus {
+                    border-right-color: var(--paginator-button-border);
+
+                    &.table-pagination-button-active {
+                        border-right-color: var(--paginator-button-active-background);
+                    }
                 }
 
                 &:last-child {

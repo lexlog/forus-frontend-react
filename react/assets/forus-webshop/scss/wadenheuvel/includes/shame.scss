@@ -1,21 +1,7 @@
 .block.block-footer .footer-nav .footer-nav-item a {
-    font: 700 12px/24px;
     color: #353535;
 }
 
-@media screen and (max-width: 1000px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        font: 700 12px/24px;
-        color: #353535;
-    }
-}
-
-@media screen and (max-width: 1700px) {
-    .block.block-footer .footer-nav .footer-nav-item a {
-        font: 700 14px/24px;
-        color: #353535;
-    }
-}
 .block {
     &.block-navbar {
         background-color: #171E5F;

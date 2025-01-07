@@ -514,14 +514,13 @@
         }
 
         .showcase-wrapper {
-            padding: 10px 20px;
+            padding: 0 20px 10px;
             position: relative;
-            border-top: 1px solid var(--border-color);
         }
 
         .showcase-mobile-filters {
             background: #fff;
-            margin: 0 -20px;
+            margin: 0 -20px 0;
             display: flex;
             flex-direction: row;
             border-bottom: 1px solid var(--border-color);

@@ -39,7 +39,9 @@ export class ProductReservationService<T = Reservation> {
         return this.apiRequest.post(`${this.prefix}/validate-address`, data);
     }
 
-    public reserve(data: object): Promise<ApiResponseSingle<T> & ResponseSimple<{ checkout_url?: string }>> {
+    public reserve(
+        data: object,
+    ): Promise<ApiResponseSingle<T> & ResponseSimple<{ id?: number; checkout_url?: string }>> {
         return this.apiRequest.post(`${this.prefix}`, this.apiFormToResource(data));
     }
 

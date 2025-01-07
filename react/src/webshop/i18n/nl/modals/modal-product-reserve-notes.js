@@ -55,6 +55,8 @@ export default {
         buttons: {
             adjust: 'Terug',
             submit: 'Bevestig',
+            processing: 'Verwerken',
+            go_to_reservation: 'Ga naar reservering',
         },
     },
 };

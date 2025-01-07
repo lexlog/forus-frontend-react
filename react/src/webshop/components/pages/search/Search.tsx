@@ -84,9 +84,9 @@ export default function Search() {
             fund_id: null,
             organization_id: null,
             product_category_id: null,
-            funds: true,
-            products: true,
-            providers: true,
+            funds: false,
+            products: false,
+            providers: false,
             order_by: sortByOptions[1]?.value.order_by,
             order_dir: sortByOptions[1]?.value.order_dir,
         },
@@ -128,16 +128,18 @@ export default function Search() {
 
     const countFiltersApplied = useMemo(() => {
         return (
-            Object.values(filterValuesActive).reduce((count: number, filter) => {
-                return (
-                    count +
-                    (filter
+            Object.keys(filterValuesActive)
+                .filter((key) => key !== 'q')
+                .reduce((count: number, key) => {
+                    const filter = filterValuesActive[key];
+                    const item = filter
                         ? typeof filter == 'object'
                             ? filter['id'] || (Array.isArray(filter) ? filter.length : 0)
                             : 1
-                        : 0)
-                );
-            }, 0) - 3
+                        : 0;
+
+                    return count + item;
+                }, 0) - 3
         );
     }, [filterValuesActive]);
 

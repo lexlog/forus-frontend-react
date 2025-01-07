@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 export default function useSelectControlKeyEventHandlers(
     selectorRef?: React.MutableRefObject<HTMLElement>,
@@ -6,15 +6,40 @@ export default function useSelectControlKeyEventHandlers(
     showOptions?: boolean,
     setShowOptions?: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-    const getFocusable = useCallback((): Array<HTMLElement> => {
-        return [...selectorRef.current.querySelectorAll('[tabindex]:not([tabindex="-1"])')] as Array<HTMLElement>;
-    }, [selectorRef]);
+    const [focusableSelectors] = useState([
+        'a[href]',
+        'area[href]',
+        'button:not([disabled])',
+        'details',
+        'iframe',
+        'object',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        '[contentEditable="true"]',
+        '[tabindex]:not([tabindex^="-"])',
+    ]);
 
-    useEffect(() => {
-        if (showOptions) {
-            window.setTimeout(() => getFocusable()[0]?.focus(), 0);
+    const isFocusable = useCallback(
+        (element?: HTMLElement) => {
+            if (!element || element.offsetParent === null) {
+                return false;
+            }
+
+            return element.matches(focusableSelectors?.join(','));
+        },
+        [focusableSelectors],
+    );
+
+    const getFocusable = useCallback((): Array<HTMLElement> => {
+        if (selectorRef.current) {
+            return [...selectorRef.current.querySelectorAll(focusableSelectors.join(','))].filter(
+                isFocusable,
+            ) as Array<HTMLElement>;
         }
-    }, [getFocusable, showOptions]);
+
+        return [];
+    }, [selectorRef, focusableSelectors, isFocusable]);
 
     const onKeyDown = useCallback(
         (e: React.KeyboardEvent) => {
@@ -55,11 +80,25 @@ export default function useSelectControlKeyEventHandlers(
     const onBlur = useCallback(
         (e: React.FocusEvent) => {
             if (showOptions && !e.currentTarget.contains(e.relatedTarget)) {
-                selectorRef?.current?.focus();
+                if (isFocusable(selectorRef?.current)) {
+                    return selectorRef?.current?.focus();
+                }
+
+                const firstFocusable = getFocusable()[0];
+
+                if (isFocusable(firstFocusable)) {
+                    firstFocusable.focus();
+                }
             }
         },
-        [selectorRef, showOptions],
+        [selectorRef, showOptions, getFocusable, isFocusable],
     );
+
+    useEffect(() => {
+        if (showOptions) {
+            window.setTimeout(() => getFocusable()[0]?.focus(), 0);
+        }
+    }, [getFocusable, showOptions]);
 
     return { onBlur, onKeyDown };
 }

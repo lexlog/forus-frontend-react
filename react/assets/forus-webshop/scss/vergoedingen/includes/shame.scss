@@ -261,9 +261,6 @@ h6 {
                         }
 
                         .search-reset {
-                            margin-left: 20px;
-                            font-size: 20px;
-
                             &:hover {
                                 color: #157c68;
                             }
@@ -497,15 +494,6 @@ h6 {
     &.block-footer {
         .footer-label {
             color: #fff;
-        }
-
-        .footer-nav {
-            .footer-nav-item {
-                a {
-                    color: #efefef;
-                    font: 500 16px/1.5em var(--base-font);
-                }
-            }
         }
 
         .footer-schedule {

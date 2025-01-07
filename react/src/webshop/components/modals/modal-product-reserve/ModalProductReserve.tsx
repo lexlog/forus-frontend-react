@@ -76,7 +76,9 @@ export default function ModalProductReserve({
     const [STEP_RESERVATION_FINISHED] = useState(7);
     const [STEP_ERROR] = useState(8);
 
+    const [submitting, setSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [reservationId, setReservationId] = useState(null);
     const [dateMinLimit] = useState(new Date());
 
     const provider = useMemo(() => product.organization, [product?.organization]);
@@ -146,9 +148,14 @@ export default function ModalProductReserve({
             custom_fields: {},
         },
         (values) => {
+            setSubmitting(true);
+
             productReservationService
                 .reserve({ ...values, voucher_id: voucher.id, product_id: product.id })
                 .then((res) => {
+                    setSubmitting(false);
+                    setReservationId(res.data.id);
+
                     if (res.data.checkout_url) {
                         return (document.location = res.data.checkout_url);
                     }
@@ -251,6 +258,11 @@ export default function ModalProductReserve({
         form.submit();
     }, [form]);
 
+    const goToReservation = useCallback(() => {
+        modal.close();
+        navigateState('reservation-show', { id: reservationId });
+    }, [modal, navigateState, reservationId]);
+
     const goToFinishStep = useCallback(() => {
         if (voucher?.amount_extra > 0) {
             setStep(STEP_EXTRA_PAYMENT);
@@ -260,7 +272,7 @@ export default function ModalProductReserve({
     }, [STEP_EXTRA_PAYMENT, confirmSubmit, voucher?.amount_extra]);
 
     const makeReservationField = useCallback(
-        (key, type, dusk = null) => {
+        (key: string, type: string, dusk: string = null) => {
             const required = product.reservation[key] === 'required';
 
             return {
@@ -1365,16 +1377,35 @@ export default function ModalProductReserve({
                             </button>
                         </div>
                         <div className="flex flex-grow flex-end">
-                            <button className="button button-light button-sm" type="button" onClick={back}>
+                            <button
+                                className="button button-light button-sm"
+                                type="button"
+                                disabled={submitting}
+                                onClick={back}>
                                 Terug
                             </button>
-                            <button
-                                className="button button-primary button-sm"
-                                type="button"
-                                onClick={confirmSubmit}
-                                data-dusk="btnConfirmSubmit">
-                                {translate('modal_product_reserve_notes.confirm_notes.buttons.submit')}
-                            </button>
+
+                            {reservationId ? (
+                                <button
+                                    className="button button-primary button-sm"
+                                    type="button"
+                                    disabled={submitting}
+                                    onClick={goToReservation}>
+                                    {translate('modal_product_reserve_notes.confirm_notes.buttons.go_to_reservation')}
+                                </button>
+                            ) : (
+                                <button
+                                    className="button button-primary button-sm"
+                                    type="button"
+                                    disabled={submitting}
+                                    onClick={confirmSubmit}
+                                    data-dusk="btnConfirmSubmit">
+                                    {submitting && <div className="mdi mdi-loading mdi-spin icon-start" />}
+                                    {submitting
+                                        ? translate('modal_product_reserve_notes.confirm_notes.buttons.processing')
+                                        : translate('modal_product_reserve_notes.confirm_notes.buttons.submit')}
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

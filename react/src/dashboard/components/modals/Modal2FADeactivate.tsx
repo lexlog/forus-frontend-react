@@ -76,8 +76,12 @@ export default function Modal2FADeactivate({
                 setErrorCode(null);
             })
             .catch((res) => {
-                pushDanger(res.data?.message || 'Unknown error.');
                 setErrorCode(res?.data?.errors?.code || null);
+                pushDanger(
+                    res.status === 404
+                        ? 'Er is een fout opgetreden. Vernieuw de pagina.'
+                        : res.data?.message || 'Unknown error.',
+                );
             })
             .finally(() => window.setTimeout(() => setDeactivating(false), 1000));
     }, [auth2FA.provider_type.key, auth2FA.uuid, confirmationCode, deactivating, identity2FAService, pushDanger]);

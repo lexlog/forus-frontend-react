@@ -7,15 +7,16 @@ export default function FundStateLabels({ fund }: { fund: Fund }) {
     const translate = useTranslate();
 
     const [stateLabels] = useState({
-        active: 'label-success',
-        paused: 'label-warning',
-        closed: 'label-default',
+        active: 'tag-success',
+        paused: 'tag-warning',
+        closed: 'tag-default',
+        waiting: 'tag-warning',
     });
 
     return (
         <Fragment>
             {!fund.archived && stateLabels[fund.state] ? (
-                <span className={`label ${stateLabels[fund.state] || ''}`}>
+                <span className={`tag tag-sm ${stateLabels[fund.state] || ''}`}>
                     {translate(`components.organization_funds.states.${fund.state}`)}
                 </span>
             ) : (
@@ -23,7 +24,7 @@ export default function FundStateLabels({ fund }: { fund: Fund }) {
             )}
 
             {fund.archived && (
-                <span className="label label-default">
+                <span className="tag tag-sm tag-default">
                     {translate('components.organization_funds.states.archived')}
                 </span>
             )}

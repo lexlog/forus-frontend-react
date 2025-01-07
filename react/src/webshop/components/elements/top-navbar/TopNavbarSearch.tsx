@@ -144,9 +144,13 @@ export default function TopNavbarSearch() {
     }, [filters.activeValues.q, isSearchResultPage, searchService, clearSearch, updateResults, setProgress]);
 
     useEffect(() => {
+        let timer: number;
+
         if (isSearchResultPage) {
-            return updateSearchFilters({ q: filters.values.q });
+            timer = window.setTimeout(() => updateSearchFilters({ q: filters.values.q }));
         }
+
+        return () => window.clearTimeout(timer);
     }, [filters.values.q, isSearchResultPage, updateSearchFilters]);
 
     useEffect(() => {
@@ -162,10 +166,6 @@ export default function TopNavbarSearch() {
 
                     if (!isSearchResultPage) {
                         navigateState('search-result', {}, { q: filters.values.q });
-
-                        window.setTimeout(() => {
-                            updateSearchFilters({ q: filters.values.q });
-                        }, 0);
                     }
                 }}
                 className={`search-form form ${resultsAll?.length > 0 ? 'search-form-found' : ''}`}>
@@ -190,17 +190,17 @@ export default function TopNavbarSearch() {
                             onBlur={() => setSearchFocused(false)}
                             aria-haspopup={true}
                         />
-                        <div
-                            className={`search-reset ${
-                                !envData.config?.flags?.genericSearchUseToggle ? 'show-sm' : ''
-                            }`}
-                            onClick={hideSearchBox}
-                            onKeyDown={clickOnKeyEnter}
-                            tabIndex={0}
-                            aria-label="Sluit zoeken"
-                            role="button">
-                            <em className="mdi mdi-close" />
-                        </div>
+                        {filters.values.q && (
+                            <div
+                                className="search-reset"
+                                onClick={() => filters.update({ q: '' })}
+                                onKeyDown={clickOnKeyEnter}
+                                tabIndex={0}
+                                aria-label="Sluit zoeken"
+                                role="button">
+                                <em className="mdi mdi-close" />
+                            </div>
+                        )}
                     </div>
                     {dropdown && (
                         <div className="search-result" role={'menu'}>
@@ -218,25 +218,25 @@ export default function TopNavbarSearch() {
                                         onKeyDown={clickOnKeyEnter}
                                         onClick={() => setGroupKey(itemGroupKey)}>
                                         {itemGroupKey === 'all' && (
-                                            <div className="search-result-sidebar-item-icon hide-sm">
+                                            <div className="search-result-sidebar-item-icon hide-sm" aria-hidden="true">
                                                 <IconSearchAll />
                                             </div>
                                         )}
 
                                         {itemGroupKey === 'funds' && (
-                                            <div className="search-result-sidebar-item-icon hide-sm">
+                                            <div className="search-result-sidebar-item-icon hide-sm" aria-hidden="true">
                                                 <IconSearchFunds />
                                             </div>
                                         )}
 
                                         {itemGroupKey === 'products' && (
-                                            <div className="search-result-sidebar-item-icon hide-sm">
+                                            <div className="search-result-sidebar-item-icon hide-sm" aria-hidden="true">
                                                 <IconSearchProducts />
                                             </div>
                                         )}
 
                                         {itemGroupKey === 'providers' && (
-                                            <div className="search-result-sidebar-item-icon hide-sm">
+                                            <div className="search-result-sidebar-item-icon hide-sm" aria-hidden="true">
                                                 <IconSearchProviders />
                                             </div>
                                         )}
@@ -266,17 +266,23 @@ export default function TopNavbarSearch() {
                                         <div key={itemKey} className="search-result-section">
                                             <div className="search-result-group-header">
                                                 {itemKey === 'funds' && (
-                                                    <div className="search-result-group-icon hide-sm">
+                                                    <div
+                                                        className="search-result-group-icon hide-sm"
+                                                        aria-hidden="true">
                                                         <IconSearchFunds />
                                                     </div>
                                                 )}
                                                 {itemKey === 'products' && (
-                                                    <div className="search-result-group-icon hide-sm">
+                                                    <div
+                                                        className="search-result-group-icon hide-sm"
+                                                        aria-hidden="true">
                                                         <IconSearchProducts />
                                                     </div>
                                                 )}
                                                 {itemKey === 'providers' && (
-                                                    <div className="search-result-group-icon hide-sm">
+                                                    <div
+                                                        className="search-result-group-icon hide-sm"
+                                                        aria-hidden="true">
                                                         <IconSearchProviders />
                                                     </div>
                                                 )}
@@ -297,7 +303,7 @@ export default function TopNavbarSearch() {
                                                 {results[itemKey].count > 3 && (
                                                     <StateNavLink
                                                         name={'search-result'}
-                                                        params={{ q: lastQuery, search_item_types: itemKey }}
+                                                        query={{ q: lastQuery, [itemKey]: 1 }}
                                                         className="search-result-group-link hide-sm">
                                                         {`${results?.[itemKey]?.count} resultaten gevonden...`}
                                                     </StateNavLink>
@@ -325,7 +331,7 @@ export default function TopNavbarSearch() {
                                                     {results[itemKey]?.count > 3 && (
                                                         <StateNavLink
                                                             name="search-result"
-                                                            params={{ q: lastQuery, search_item_types: itemKey }}
+                                                            query={{ q: lastQuery, [itemKey]: 1 }}
                                                             className="search-result-group-link show-sm">
                                                             {`${results?.[itemKey]?.count} resultaten gevonden...`}
                                                         </StateNavLink>

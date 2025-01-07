@@ -19,6 +19,7 @@ export default {
             paused: 'Gepauzeerd',
             closed: 'Gestopt',
             archived: 'Gearchiveerd',
+            waiting: 'Wachtend',
         },
         labels: {
             name: 'Naam',

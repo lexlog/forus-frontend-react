@@ -274,6 +274,24 @@
         }
     }
 
+    .search-area {
+        display: flex;
+
+        .search-reset {
+            position: absolute;
+            align-self: center;
+            z-index: 99;
+            right: 15px;
+            cursor: pointer;
+            height: 20px;
+            line-height: 20px;
+
+            .mdi {
+                font-size: 20px;
+            }
+        }
+    }
+
     &.block-navbar-search-results {
         .search-result {
             border-top-left-radius: 0;
@@ -329,23 +347,8 @@
                 z-index: 99;
             }
 
-            input {
-                &.form-control {
-                    &:focus {
-                        border: none;
-                    }
-                }
-            }
-
             .search-reset {
-                position: absolute;
-                align-self: center;
-                z-index: 99;
                 right: 10px;
-
-                .mdi {
-                    font-size: 20px;
-                }
             }
         }
 
